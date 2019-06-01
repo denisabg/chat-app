@@ -1,0 +1,18 @@
+.outter{
+    position: relative;
+    margin: -1px 25%;
+    top: 0px;
+    
+    height: 400px;
+    overflow: auto;
+    padding:50px  0;
+    -moz-box-sizing: border-box ;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid blue;
+    min-height: 4em;
+ }
+.content {
+    overflow: auto;
+    height: 100%;
+}
