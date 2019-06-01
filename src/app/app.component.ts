@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ChatService} from './services/chat-service';
 import { IMessage } from './interfaces/message';
-import { MatButtonModule, MatInputModule, MatCardModule} from '@angular/material';
 
 @Component({
   selector: 'app-root',
@@ -26,9 +25,9 @@ export class AppComponent {
     }
 
     //TODO: reopen after URI released 
-    this.dataService.addMessage(this.chatMessage).subscribe(res=>{
+    //this.dataService.addMessage(this.chatMessage).subscribe(res=>{
        this.chatHub.push(this.chatMessage);
-    });
+    //});
     this.message='';
 
   }
