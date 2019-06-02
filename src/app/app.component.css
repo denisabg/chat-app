@@ -8,6 +8,11 @@
     max-width: 500px;
     width: 100%;
 }
+.chat-form{
+    width: 70%;
+    border: 3px;
+    align-self: auto;
+}
 .message-form{
     width: 100%;
 }
@@ -18,9 +23,11 @@
     max-width: 500px;
     width: 100%;
 }
-
-.chat-form{
+.mat-card {
     height: 400px;
     max-height: 400px;
-    width: 100%;
+    overflow-y: auto;
+}
+.mat-button{
+    margin-right: 8px;
 }

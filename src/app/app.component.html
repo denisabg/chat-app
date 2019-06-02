@@ -1,23 +1,24 @@
-<form class="user-form">
+<mat-form class="user-form">
   <mat-form-field >
     <input matInput placeholder="User Name" [(ngModel)]='user' name='UserName' class="input-user-form">
   </mat-form-field>
-</form>
+</mat-form>
 
-<form class="chat-form">
-    <mat-card class="chat-box">
-      <div *ngFor='let chat of chatHub'>
+<mat-form class="chat-form">
+    <mat-card matCard class="chat-box">
+      <div *ngFor='let chat of chatHub.slice().reverse()'>
+        <div> {{chat.DateStamp | date: format}} </div>
         <span> {{chat.UserName}} </span>
         <span> {{chat.ChatMessage}} </span>
       </div>
     </mat-card>
-</form>
+</mat-form>
 
-<form class="message-form">
+<mat-form class="message-form">
   <mat-form-field >
-    <input matInput placeholder="New Message" [(ngModel)]='message' name='Message' class="input-user-form">
-    <button matButton (click)=sendData()>send</button>
+    <input matInput placeholder="New Message" [(ngModel)]='message' name='Message' class="input-message-form">
+    <button mat-raised-button (click)=sendData()>Send</button>
   </mat-form-field>
-</form>
+</mat-form>
 
 
