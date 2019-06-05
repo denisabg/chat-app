@@ -1,77 +1,102 @@
-import { Component, Input } from '@angular/core';
-import { DataService} from './services/data-service';
+import { Component, Input, OnInit } from '@angular/core';
+import { DataService } from './services/data-service';
 import { IMessage } from './interfaces/message';
-import { MatDialog } from '@angular/material';
-import { AbstractFormGroupDirective } from '@angular/forms';
+import { Observable, interval } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+
   title = 'chat-app';
   @Input() user: string;
   @Input() message: string;
+  public chatHub: IMessage[] = []
 
-  constructor(private dataService: DataService){
+  constructor(private dataService: DataService) {
   }
-  
-  
 
-  public chatHub: IMessage[]=[]
-  //public Message: IMessage;
-  //private format: string= ('dd/MM/yyyy  hh:mm:ss');
+  ngOnInit() {
 
-  sendData(){
-    let dateNow : Date = new Date();
-    //  console.log(`date.now === ${ dateNow.toISOString() }`);
-    //  console.log(`this.user === ${ this.user}`);
-    //  console.log(`this.message === ${ this.message }`);
+    let dateNow: Date = new Date();
 
-    if(!this.user || !this.message){
+    interval(10000).subscribe((counter) => {
+
+      let timeStamp = this.chatHub.length > 0 ? this.chatHub[this.chatHub.length - 1].DateStamp : dateNow.toUTCString()
+
+      console.log(`timeStamp === ${timeStamp}`);
+
+      this.dataService.getMessages(timeStamp)
+        .subscribe(res => {
+          Array.prototype.push.apply(this.chatHub, res);
+
+          console.log(counter + ': reloaded from ChatHub');
+
+          this.chatHub = this.chatHub.filter((test, index, array) =>
+            index === array.findIndex((findTest) => {
+              return findTest.Id === test.Id && findTest.DateStamp === test.DateStamp;
+            }
+            ));
+        });
+    });
+  }
+
+
+
+  sendData() {
+    let dateNow: Date = new Date();
+
+    if (!this.user || !this.message) {
       console.warn(' (!this.user || !this.message) are undefined ');
       return;
     }
+    let timeStamp = this.chatHub.length > 0 ? this.chatHub[this.chatHub.length - 1].DateStamp : dateNow.toUTCString();
 
-    let Message:IMessage ={
+    let Message: IMessage = {
       Id: this.chatHub.length.toString(),
-      DateStamp: dateNow.toISOString(),
+      DateStamp: timeStamp,
       UserName: this.user,
       Message: this.message
     }
 
-    // console.log(`Message === ${ Message }`);
-
-
-    //TODO: reopen after URI released 
     this.dataService
-    .addMessage(Message)
-    .subscribe(res=>{
-      if (res) {
-        this.chatHub.push(res)
-        this.getData(dateNow);
-      }
-    });
+      .addMessage(Message)
+      .subscribe(res => {
+        if (res) {
+          this.chatHub.push(res)
+          this.getData(res.DateStamp);
+        }
+      });
 
-    this.message='';
+    this.message = '';
     return;
   }
 
-  getData(dateNow){
-    //TODO: check sort order
-    let timeShtamp = dateNow.toISOString();
-    let count =this.chatHub.length;
-    if( count > 0)
-    {
-      let lastMessage = this.chatHub.sort((a, b) => a.DateStamp >= b.DateStamp ? 0 : 1)[count-1];
-      timeShtamp = lastMessage.DateStamp;
+
+  getData(dateNow) {
+    let timeStamp = dateNow.toISOString();
+    let count = this.chatHub.length;
+    if (count > 0) {
+      let lastMessage = this.chatHub.sort((a, b) => a.DateStamp >= b.DateStamp ? 0 : 1)[0];
+      timeStamp = lastMessage.DateStamp;
     }
 
-    this.dataService.getMessages(timeShtamp)
-    .subscribe(res=>{
-      //var result = this.chatHub.concat(res).slice().reverse();
-      Array.prototype.push.apply(this.chatHub, res);
-    });
+    this.dataService.getMessages(timeStamp)
+      .subscribe(res => {
+
+        Array.prototype.push.apply(this.chatHub, res);
+
+        this.chatHub = this.chatHub.filter((test, index, array) =>
+          index === array.findIndex((findTest) => {
+            return findTest.Id === test.Id && findTest.DateStamp === test.DateStamp;
+          }
+          ));
+      });
+  }
+
+  ngOnDestroy() {
+
   }
 }
