@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
 
       let timeStamp = this.chatHub.length > 0 ? this.chatHub[this.chatHub.length - 1].DateStamp : dateNow.toUTCString()
 
-      console.log(`timeStamp === ${timeStamp}`);
+      console.log(`timeStamp =onInit== ${timeStamp}`);
 
       this.dataService.getMessages(timeStamp)
         .subscribe(res => {
@@ -46,32 +46,32 @@ export class AppComponent implements OnInit {
 
 
   sendData() {
+    let $this = this;
     let dateNow: Date = new Date();
 
-    if (!this.user || !this.message) {
+    if (!$this.user || !$this.message) {
       console.warn(' (!this.user || !this.message) are undefined ');
       return;
     }
-    let timeStamp = this.chatHub.length > 0 ? this.chatHub[this.chatHub.length - 1].DateStamp : dateNow.toUTCString();
+    let timeStamp = $this.chatHub.length > 0 ? $this.chatHub[$this.chatHub.length - 1].DateStamp : dateNow.toUTCString();
+    console.log(`timeStamp =clicked== ${timeStamp}`);
 
     let Message: IMessage = {
-      Id: this.chatHub.length.toString(),
-      DateStamp: timeStamp,
-      UserName: this.user,
-      Message: this.message
+      Id: $this.chatHub.length.toString(),
+      DateStamp: dateNow.toUTCString(),
+      UserName: $this.user,
+      Message: $this.message
     }
 
-    this.dataService
+    $this.dataService
       .addMessage(Message)
       .subscribe(res => {
         if (res) {
-          this.chatHub.push(res)
-          this.getData(res.DateStamp);
+          $this.chatHub.push(res)
+          $this.getData(res.DateStamp);
         }
       });
-
-    this.message = '';
-    return;
+    return $this.message = '';
   }
 
 

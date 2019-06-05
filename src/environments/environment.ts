@@ -6,8 +6,7 @@ export const environment = {
   production: false,
   servers: {
 		resource: "http://localhost:59098",
-		api: "http://localhost:59098/api",
-	
+		api: "http://localhost:59098/api"
 	}
 };
 
