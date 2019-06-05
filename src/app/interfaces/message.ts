@@ -1,5 +1,6 @@
 export interface IMessage{
+    Id: string,
     DateStamp: string,
     UserName: string,
-    ChatMessage: string
+    Message: string
 }

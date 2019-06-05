@@ -9,7 +9,7 @@
       <div *ngFor='let chat of chatHub.slice().reverse()'>
         <div> {{chat.DateStamp | date: format}} </div>
         <span> {{chat.UserName}} </span>
-        <span> {{chat.ChatMessage}} </span>
+        <span> {{chat.Message}} </span>
       </div>
     </mat-card>
 </mat-form>
@@ -17,7 +17,7 @@
 <mat-form class="message-form">
   <mat-form-field >
     <input matInput placeholder="New Message" [(ngModel)]='message' name='Message' class="input-message-form">
-    <button mat-raised-button (click)=sendData()>Send</button>
+    <button mat-raised-button (click)=sendData() class="input-message-button">Send</button>
   </mat-form-field>
 </mat-form>
 

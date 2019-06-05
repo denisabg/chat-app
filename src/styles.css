@@ -2,3 +2,42 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-form .mat-form-field {
+    display: initial;
+    position: inherit;
+    text-align: left;
+}
+.user-form{
+    width: 100%;
+}
+.input-user-form {
+    width: 80%;
+    text-align: center;
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+.chat-form{
+    width: 70%;
+    border: 3px;
+    align-self: auto;
+}
+.message-form{
+    width: 100%;
+}
+.input-message-form {
+    width: 60%;
+    text-align: center;
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+.mat-card {
+    height: 400px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+.input-message-button{
+    margin-right: 8px;
+}

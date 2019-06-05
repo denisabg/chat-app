@@ -1,7 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { ChatService} from './services/chat-service';
+import { DataService} from './services/data-service';
 import { IMessage } from './interfaces/message';
 import { MatDialog } from '@angular/material';
+import { AbstractFormGroupDirective } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -13,41 +14,64 @@ export class AppComponent {
   @Input() user: string;
   @Input() message: string;
 
-  constructor(){
+  constructor(private dataService: DataService){
   }
   
+  
+
   public chatHub: IMessage[]=[]
-  private chatMessage: IMessage;
-  private dataService: ChatService;
-  private format: string= ('dd/MM/yyyy  hh:mm:ss');
+  //public Message: IMessage;
+  //private format: string= ('dd/MM/yyyy  hh:mm:ss');
 
   sendData(){
     let dateNow : Date = new Date();
-    // console.log(`date.now === ${ dateNow.toISOString() }`);
-    // console.log(`this.user === ${ this.user}`);
-    // console.log(`this.message === ${ this.message }`);
+    //  console.log(`date.now === ${ dateNow.toISOString() }`);
+    //  console.log(`this.user === ${ this.user}`);
+    //  console.log(`this.message === ${ this.message }`);
 
     if(!this.user || !this.message){
       console.warn(' (!this.user || !this.message) are undefined ');
       return;
     }
 
-    this.chatMessage={
+    let Message:IMessage ={
+      Id: this.chatHub.length.toString(),
       DateStamp: dateNow.toISOString(),
       UserName: this.user,
-      ChatMessage: this.message
+      Message: this.message
     }
 
+    // console.log(`Message === ${ Message }`);
+
+
     //TODO: reopen after URI released 
-    //this.dataService.addMessage(this.chatMessage).subscribe(res=>{
-       this.chatHub.push(this.chatMessage);
-    //});
+    this.dataService
+    .addMessage(Message)
+    .subscribe(res=>{
+      if (res) {
+        this.chatHub.push(res)
+        this.getData(dateNow);
+      }
+    });
 
     this.message='';
     return;
   }
 
-  getData(){
-    
+  getData(dateNow){
+    //TODO: check sort order
+    let timeShtamp = dateNow.toISOString();
+    let count =this.chatHub.length;
+    if( count > 0)
+    {
+      let lastMessage = this.chatHub.sort((a, b) => a.DateStamp >= b.DateStamp ? 0 : 1)[count-1];
+      timeShtamp = lastMessage.DateStamp;
+    }
+
+    this.dataService.getMessages(timeShtamp)
+    .subscribe(res=>{
+      //var result = this.chatHub.concat(res).slice().reverse();
+      Array.prototype.push.apply(this.chatHub, res);
+    });
   }
 }
