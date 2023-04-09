@@ -3,7 +3,7 @@ export const environment = {
   servers: {
 		// resource: "..",
 		// api: "../api",
-		resource: "http://uchatwebapi.azurewebsites.net",
-		api: "http://uchatwebapi.azurewebsites.net/api"
+		resource: "https://uchatwebapi.azurewebsites.net",
+		api: "https://uchatwebapi.azurewebsites.net/api"
 	}
 };
